@@ -1,5 +1,6 @@
 package ru.geekbrains.myapplication;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,16 +34,41 @@ public class FragmentMain extends Fragment {
     private Button btnEnterCity;
     private OpenWeather openWeather;
     private ImageView iconWeather;
+    private Context mainContext;
+    private SharedPreferences sharedPref;
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        savePreferences();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.content_main, null);
-
+        mainContext = inflater.getContext().getApplicationContext(); // получаем контекст
         initRetorfit();
         initGui();
         initEvents();
+        initPreferences();
         return mainView;
+    }
+
+    private void initPreferences(){
+        sharedPref =  getActivity().getPreferences(MODE_PRIVATE);
+        loadPreferences();    // загрузить настройки
+    }
+
+    private void loadPreferences() {
+        String city = sharedPref.getString("city", "Moscow");
+        editTextCity.setText(city);
+    }
+
+    private void savePreferences() {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("city", editTextCity.getText().toString());
+        editor.apply();
     }
 
     private void initEvents() {
