@@ -1,6 +1,5 @@
 package ru.geekbrains.myapplication;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,9 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +30,6 @@ public class FragmentMain extends Fragment {
     private TextView textTemp;
     private Button btnEnterCity;
     private OpenWeather openWeather;
-    private ImageView iconWeather;
     private SharedPreferences sharedPref;
     private String prefCity;
 
@@ -42,7 +38,6 @@ public class FragmentMain extends Fragment {
         super.onSaveInstanceState(outState);
         savePreferences();
     }
-
 
     @Nullable
     @Override
@@ -137,7 +132,7 @@ public class FragmentMain extends Fragment {
         editTextCity = mainView.findViewById(R.id.edit_text_city);
         textTemp = mainView.findViewById(R.id.text_temp_in_city);
         btnEnterCity = mainView.findViewById(R.id.btn_enter_city);
-        iconWeather = mainView.findViewById(R.id.icon_weather);
+        ImageView iconWeather = mainView.findViewById(R.id.icon_weather);
         iconWeather.setBackgroundColor(Color.BLACK);
         Picasso
                 .with(mainView.getContext())
