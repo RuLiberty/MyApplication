@@ -34,8 +34,8 @@ public class FragmentMain extends Fragment {
     private Button btnEnterCity;
     private OpenWeather openWeather;
     private ImageView iconWeather;
-    private Context mainContext;
     private SharedPreferences sharedPref;
+    private String prefCity;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -43,16 +43,22 @@ public class FragmentMain extends Fragment {
         savePreferences();
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.content_main, null);
-        mainContext = inflater.getContext().getApplicationContext(); // получаем контекст
         initRetorfit();
         initGui();
-        initEvents();
+        initOnClickEvents();
         initPreferences();
         return mainView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requestWeather(null);
     }
 
     private void initPreferences(){
@@ -61,8 +67,8 @@ public class FragmentMain extends Fragment {
     }
 
     private void loadPreferences() {
-        String city = sharedPref.getString("city", "Moscow");
-        editTextCity.setText(city);
+        prefCity = sharedPref.getString("city", "Moscow");
+        editTextCity.setText(prefCity);
     }
 
     private void savePreferences() {
@@ -71,20 +77,25 @@ public class FragmentMain extends Fragment {
         editor.apply();
     }
 
-    private void initEvents() {
+    private void initOnClickEvents() {
         // реакция на нажатие кнопки
         btnEnterCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editTextCity.getText().toString().equals("")){
-                    requestRetrofit("Moscow", "3d1ebc018f306cf73036dd285969216c");
-                } else {
-                    requestRetrofit(editTextCity.getText().toString(), "3d1ebc018f306cf73036dd285969216c");
-                }
+                requestWeather(v);
             }
         });
+    }
 
-
+    private void requestWeather(@Nullable View view) {
+        if (prefCity != null && prefCity.length() > 1 && view == null) {
+            requestRetrofit(prefCity, "3d1ebc018f306cf73036dd285969216c");
+        }
+        if (editTextCity.getText().toString().equals("")){
+            requestRetrofit("Moscow", "3d1ebc018f306cf73036dd285969216c");
+        } else {
+            requestRetrofit(editTextCity.getText().toString(), "3d1ebc018f306cf73036dd285969216c");
+        }
     }
 
     private void initRetorfit() {
@@ -133,11 +144,6 @@ public class FragmentMain extends Fragment {
                 .load("https://openweathermap.org/themes/openweathermap/assets/img/openweather-negative-logo-RGB.png")
                 .into(iconWeather);
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
 }
