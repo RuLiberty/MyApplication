@@ -1,5 +1,6 @@
 package ru.geekbrains.myapplication;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -54,6 +57,7 @@ public class FragmentMain extends Fragment {
         super.onPause();
     }
 
+    @SuppressLint("InflateParams")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class FragmentMain extends Fragment {
         initRetorfit();
         initGui();
         initOnClickEvents();
-        Realm.init(getContext().getApplicationContext());
+        Realm.init(Objects.requireNonNull(getContext()).getApplicationContext());
         return mainView;
     }
 
@@ -103,7 +107,7 @@ public class FragmentMain extends Fragment {
     private void editElement(String city, int temp){
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        realm.where(WeatherTable.class).equalTo("city", city).findFirst().setTemp(temp);
+        Objects.requireNonNull(realm.where(WeatherTable.class).equalTo("city", city).findFirst()).setTemp(temp);
         realm.commitTransaction();
         realm.close();
         historyWeatherAdapter.notifyDataSetChanged();
@@ -113,7 +117,7 @@ public class FragmentMain extends Fragment {
     private void deleteElement(String city){
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        realm.where(WeatherTable.class).equalTo("city", city).findFirst().deleteFromRealm();
+        Objects.requireNonNull(realm.where(WeatherTable.class).equalTo("city", city).findFirst()).deleteFromRealm();
         realm.commitTransaction();
         realm.close();
         historyWeatherAdapter.notifyDataSetChanged();
