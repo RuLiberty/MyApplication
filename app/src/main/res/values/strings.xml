@@ -5,7 +5,7 @@
     <string name="nav_header_title">Логин пользователя</string>
     <string name="nav_header_subtitle">mail@mail.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Настройки отображения</string>
+    <string name="action_clear_history">Очистить историю</string>
     <string name="tools">Настройки</string>
     <string name="main_menu">На главную</string>
     <string name="share">Поделиться</string>
@@ -14,4 +14,5 @@
     <string name="enter_city">Moscow, RU</string>
     <string name="temp_in_city"> °С</string>
     <string name="ok">OK</string>
+    <string name="icon_weather">icon weather</string>
 </resources>
